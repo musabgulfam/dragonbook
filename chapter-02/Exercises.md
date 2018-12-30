@@ -346,3 +346,9 @@ If we evaluate by starting from the right and pushing the operands to the stack:
 [] Pop: 14, 2, and operate: 14 - 2
 [12] Push: 12
 ```
+
+#### Exercise 2.4.1: Construct recursive-descent parsers, starting with the following grammars: 
+
+a) S -> +SS | -SS | a
+b) S -> S ( S ) S | ϵ
+c) S -> 0 S 1 | 0 1

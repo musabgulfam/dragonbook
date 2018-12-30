@@ -82,3 +82,174 @@ Synonymously, we can also consider pre-order traversal as *performing the action
 rest -> + term {print('+')} rest
 ```
 
+### 2.4 - Parsing
+
+For any context-free grammar, there is a parser that takes at most `O(n^3)` time to parse a string of `n` terminals. This is slow. Therefore, the grammar must be designed  to be parsed quickly. It is possible to parse linear time. To do this requires the parser implementation to do a left-to-right scan over the input, and perform a look-ahead of 1 terminal at a time while constructing the parse tree.
+
+There are two classes of parse methods: (1) top-down, and (2) bottom-up.
+
+For top-down parsers, the construction of the parse tree starts at the root and proceeds down towards the leaves. 
+
+The pattern is like so:
+
+1. At node N, labeled with a nonterminal A, select one of the productins for A and construct children at N for the symbols in the production body.
+2. Find the next node at which the subtree is to be constructed, typically the leftmost unexpanded nonterminal of the tree.
+
+For most grammars, you can do this with a single left-to-right scan of the string. 
+
+The case is opposite for bottom up. Leaves are constructed first and move up to construct the root. 
+
+Top-down parsers are usually much easier to construct, but bottom-up parsers can handle more classes of grammars.
+
+Let's look at top-down parsers in more detail.
+
+**Lookahead** - The current terminal being scanned in the input is the *lookahead* symbol. The initial lookahead is the first terminal of the input string.
+
+For example:
+
+Given the grammar:
+
+```
+stmt -> expr ;
+    | if ( expr ) stmt
+    | for ( optexpr ; optexpr ; optexpr ) stmt
+    | other
+
+optexpr -> ϵ
+    | expr
+```
+
+```
+for ( ; expr ; expr ) other
+```
+
+The `for` terminal would be the initial lookahead. We have a parse tree pointer, and lookahead symbol pointer to perform recursive descent parsing.
+
+Recursive descent parsing uses a set of recursive procedures to process the input. 
+
+Uses as set of procedures in that a single procedure is associated with each nonterminal of a grammar. A common method is predictive parsing.
+
+In predictive parsing, the lookahead symbol unambiguously determines the flow of control. 
+
+Basic example;
+
+```
+stmt -> for (optexpr ; optexpr ; optexpr ) stmt
+```
+
+The recursive descent parser would have a procedure to match this production with the following logic:
+
+```
+match('for'); match('('); 
+optexpr(); match(';'); optexpr(); match(';'); optexpr(); 
+match(')'); stmt();
+```
+
+Going back to the original grammar, we find that the first set of stmt: 
+
+```
+FIRST(stmt) = { expr, if, for, other }
+```
+
+We can design a predictive parser to function similar to:
+
+```
+void stmt() {
+    switch(lookahead) {
+        case expr:
+            match(expr); match(';'); break;
+        case if:
+            match(if); match('('); match(expr); match(')'); stmt();
+            break;
+        case for:
+            match(for); match('(');
+            optexpr(); match(';'); optexpr(); match(';'); optexpr();
+            match(')'); stmt(); break;
+        case other:
+            match(other); break;
+        default:
+            report("syntax error");
+    }
+}
+
+void optexpr() {
+    if(lookahead == expr) match(expr);
+}
+
+void match(terminal t) {
+    if(lookahead == t) lookahead = nextTerminal;
+    else report("syntax error");
+}
+```
+
+Again, a predictive parser is a program that will execute a procedure for a nonterminal it encounters if it is a nonterminal. If it encounters a nonterminal, the following are performed:
+
+* Given the nonterminal A, the predictive parser decides which production from A to use by examining the lookahead symbol. If α is the production body, and is not ϵ, and  the lookahead symbol is in FIRST(α), the lookahead symbol is processed.
+* The procedure called will mimic the body of the chosen production. Each of the symbols within the production body are executed from left-to-right. When nonterminals are encountered, a procedure will be called for that nonterminal. In effect, this moves the lookahead symbol further.
+
+The process completes successfully if the input is consumed and matched. Otherwise, a syntax error shall be reported.
+
+What is left recursion? If your production looks like this:
+
+```
+expr -> expr + term
+```
+
+Then it is left recursive. It will then give the possibility in that the recursive descent parser will loop forever. 
+
+The leftmost symbol of the body is the same as the nonterminal. This could lead to infinite recursive calls. Instead, we can rewrite the production to eliminate  
+this infinite recursion. Use the form `A -> Aα | β`. 
+
+So let's try and eliminate the infinite recursion by rewriting the `expr -> expr + term` production to fit the above.
+
+```
+expr -> expr + term
+
+A = expr
+α = + term
+β = term
+```
+
+Written as `A -> Aα | β`, we have:
+
+```
+expr -> expr + term | term
+```
+
+Alternatively, we can convert it to right-recursive where R is a new production.
+
+```
+A -> βR 
+R -> αR | ϵ
+
+A = expr
+α = + term
+β = term
+R = expr'
+
+expr -> term expr' 
+expr' -> + term expr' | ϵ
+```
+
+Visually, left recursion represents a tree growing deep on the left side. While, right-recursion represents a tree growing deep on the right side.
+
+```
+
+             /|
+            / |
+           /  |
+          /___|
+
+          Left Recursion
+
+            |\
+            | \
+            |  \
+            |___\
+            
+            Right Recursion
+```
+
+### 2.5 - A Translator for Simple Expressions
+
+### 2.6 - Lexical Analysis
