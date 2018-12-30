@@ -289,3 +289,60 @@ Then for example, with `95-2*`, we can derive the parse tree:
 ![Parse Tree 2.3.2](assets/parse-tree-7.png)
 
 A traversal will give us: `(, 9, -, 5, *, 2, ) -> (9-5*2)`.
+
+#### Exercise 2.3.3: Construct a syntax-directed translation scheme that translates integers into roman numeral.
+
+[TODO]
+
+#### Exercise 2.3.4: Construct a syntax-directed translation scheme that translates roman numerals up to 2000 into integers.
+
+[TODO]
+
+#### Exercise 2.3.5: Construct a syntax-directed translation scheme to translate postfix arithmetic expressions into equivalent prefix arithmetic expressions.
+
+The grammar for postfix arithmetic expression is:
+
+```
+Expr -> Expr Expr + | Expr Expr - | Expr Expr * | Expr Expr / | Digit
+Digit -> 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9
+```
+
+Since we want to create a prefix expression, we must perform the semantic action *before* we have visit the node. 
+
+```
+Expr -> print('+') Expr Expr + 
+    | print('-') Expr Expr - 
+    | print('*') Expr Expr * 
+    | print('/') Expr Expr / 
+    | Digit
+Digit -> print('0') 0 
+    | print('1') 1 
+    | print('2') 2 
+    | print('3') 3 
+    | print('4') 4 
+    | print('5') 5 
+    | print('6') 6 
+    | print('7') 7 
+    | print('8') 8 
+    | print('9') 9
+```
+
+Given `95+2-`, The result is `12`. Our syntax-directed translation will be:
+
+![Parse Tree 2.3.5](assets/parse-tree-8.png)
+
+Performing the semantic actions will yield: `-+952`. 
+
+If we evaluate by starting from the right and pushing the operands to the stack:
+
+```
+[] Push: 2
+[2] Push: 5
+[5, 2] Push: 9
+[9, 5, 2] Pointer: +
+[2] Pop: 9, 5, and operate: 9 + 5
+[14, 2] Push: 14
+[14, 2] Pointer: -
+[] Pop: 14, 2, and operate: 14 - 2
+[12] Push: 12
+```

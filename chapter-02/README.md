@@ -68,3 +68,17 @@ A semantic rule is evaluated at the appropriate node for each parse tree. An att
 
 What makes a synthesized attribute special is that they have the property in that they can be evaluated during a single bottom-up traversal of a parse tree.
 
+*Depth-first tree traversal* is the most commonly used method of tree traversal when it comes to the topic of compilers. There are several methods to perform a depth-first traversal:
+
+1. In-order traversal. Visit the left child, root, and right child.
+2. Pre-order traversal. Visit the root, left child, and right child.
+3. Post-order traversal. Visit the left child, right child, and root.
+
+Synonymously, we can also consider pre-order traversal as *performing the action* is done before we visit the node, and post-order traversal as the action being done after visiting the node. 
+
+*Semantic actions* are program fragments embedded within production bodies. 
+
+```
+rest -> + term {print('+')} rest
+```
+
