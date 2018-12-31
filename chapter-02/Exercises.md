@@ -350,5 +350,34 @@ If we evaluate by starting from the right and pushing the operands to the stack:
 #### Exercise 2.4.1: Construct recursive-descent parsers, starting with the following grammars: 
 
 a) S -> +SS | -SS | a
+
+See: [Code for Exercise 2.4.1a](code/ex241a/Main.java)
+
 b) S -> S ( S ) S | ϵ
+
+This one is left recursive, so we will need to convert to the form:
+
+```
+A -> Aα | β
+```
+ 
+This can also be written as:
+
+```
+A -> βR
+R -> αR
+```
+
+If β is ϵ, and A is S, then we can rewrite:
+
+``` 
+S -> R
+R -> αR | ϵ
+
+S -> R
+R -> ( S ) S | ϵ
+```
+
+See: [Code for Exercise 2.4.1b](code/ex241b/Main.java)
+
 c) S -> 0 S 1 | 0 1
