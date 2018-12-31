@@ -381,3 +381,12 @@ R -> ( S ) S | ϵ
 See: [Code for Exercise 2.4.1b](code/ex241b/Main.java)
 
 c) S -> 0 S 1 | 0 1
+
+This one is also left recursive so we must rewrite it to eliminate potential infinite recursion.
+
+```
+S -> 0 R
+R -> S 1 | 1
+```
+
+ See: [Code for Exercise 2.4.1c](code/ex241c/Main.java)
