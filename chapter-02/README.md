@@ -481,5 +481,7 @@ Enter input: testId
 Token tag: ID
 ```
 
-### 2.7 - Symbol Table
+### 2.7 - Symbol Tables
+
+### 2.8 - Intermediate Code Generation
 

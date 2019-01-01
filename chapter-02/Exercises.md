@@ -416,4 +416,55 @@ private void ignoreBlockComment() throws IOException {
  ```
 
  See [Code for Exercise 2.6.1](code/ex261).
- 
+
+ #### Exercise 2.6.2: Extend the lexical analyzer in Section 2.6.5 to recognize the relational operators `<`, `<=`, `==`, `!=`, `>=`, `>`.
+
+I will assume that for `!=`, if we encounter `!`, and it is not followed by `=`, there will be a syntax error. Similar for `==`, if we counter `=` and it is not followed by `=`, there will be a syntax error.
+
+```
+private Token scanRelop() throws IOException {
+    if(peek == '<') {
+        peek = (char)System.in.read();
+        if(peek == '=') {
+            return new Relop("<=");
+        } else {
+            return new Relop("<");
+        }
+    }  
+    if(peek == '>') {
+        peek = (char)System.in.read();
+
+        if(peek == '=') {
+            return new Relop(">=");
+        } else {
+            return new Relop(">");
+        }
+    }
+    if(peek == '!') {
+        peek = (char)System.in.read();
+
+        if(peek == '=') {
+            return new Relop("!=");
+        } else {
+            throw new IOException("Syntax Error. Expected: =");
+        }
+    }
+    if(peek == '=') {
+        peek = (char)System.in.read();
+
+        if(peek == '=') {
+            return new Relop("==");
+        } else {
+            throw new IOException("Syntax Error. Expected: =");
+        }
+    }
+
+    return null;
+}
+```
+
+See [Code for Exercise 2.6.2](code/ex262)
+
+ #### Exercise 2.6.3: Extend the lexical analyzer in Section 2.6.5 to recognize floating point numbers such as `2.`, `3.14`, and `.5`.
+
+ [TODO]
