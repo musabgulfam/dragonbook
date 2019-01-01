@@ -390,3 +390,30 @@ R -> S 1 | 1
 ```
 
  See: [Code for Exercise 2.4.1c](code/ex241c/Main.java)
+
+ #### Exercise 2.6.1: Extend the lexical analyzer in Section 2.6.5 to remove comments, defined as follows:
+
+ a) A comment begins with `//` and includes all characters until the end of that line.
+ b) A comment begins with `/*` and includes all characters throw the next occurrence of the character sequence `*/`.
+
+ General approach:
+
+ ```
+private void ignoreLineComment() throws IOException {
+    // read until '\n' is encountered.
+    do {
+        peek = (char)System.in.read();
+    } while(peek != '\n');
+}
+
+private void ignoreBlockComment() throws IOException {
+    // return until */ is encountered.
+    do {
+        peek = lookahead;
+        lookahead = (char)System.in.read();
+    } while(peek != '*' && lookahead != '/');
+}
+ ```
+
+ See [Code for Exercise 2.6.1](code/ex261).
+ 
