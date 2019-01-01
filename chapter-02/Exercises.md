@@ -473,7 +473,7 @@ If we find that the character value is `.`, then we can start parsing the `manti
 
 The result obtained should then be the value of `base + mantissa`.
 
- ```
+```
 if(Character.isDigit(peek) || peek == '.') {
     boolean isFloating = false;
     int places = 10;
@@ -508,3 +508,72 @@ if(Character.isDigit(peek) || peek == '.') {
 ```
 
 See [Code for Exercise 2.6.3](code/ex263).
+
+#### Exercise 2.8.1: For-statements in C and Java have the form:
+
+```
+for( expr1 ; expr2 ; expr3 ) stmt
+```
+
+The meaning of this is similar to:
+
+```
+expr1; while ( expr2 ) { stmt expr3; }
+```
+
+Define a class *For* for for-statements, similar to class *If* in Fig. 2.43.
+
+```
+    class For extends Stmt {
+        Expr expr1;
+        Expr expr2;
+        Expr expr3;
+        Stmt s;
+
+        public For(Expr a, Expr b, Expr c, Stmt x) {
+            this.expr1 = a;
+            this.expr2 = b;
+            this.expr3 = c;
+            this.s = x;
+
+            start = newlabel();
+            end = newlabel();
+        }
+
+        public void gen() {
+            expr1.gen();
+
+            emit(start + ": ");
+            Expr booleanEval = expr2.rvalue();
+            emit("ifFalse " + booleanEval.toString() + " goto " + end);
+            s.gen();
+            emit(expr3.gen());
+
+            emit(end + ": ");
+        }
+    }
+```
+
+#### Exercise 2.8.2: The programming language C does not have a boolean type. Show how a C compiler might translate an if-statement into three-address code.
+
+An if statement in C looks like:
+
+```
+if(expr1) {
+    expr2;
+} 
+expr3;
+```
+
+`expr` then should be evaluating to whether, or not it is `0`. If it is `0`, then we branch directly to `expr3`. Otherwise, we go to `expr2` then `expr3`. 
+
+```
+t1 = expr1;
+t2 = t1 - t1;
+IfEqual t3 0 goto Expr3
+expr2
+Expr3:
+    expr3
+```
+
+The key here is to introduce emitting of the code `IfEqual t3 0 goto Expr3`.

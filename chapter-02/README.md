@@ -483,5 +483,126 @@ Token tag: ID
 
 ### 2.7 - Symbol Tables
 
+*Symbol tables* are the data structures that are used to store information during the analysis phase. It is then used when code is generated during synthesis phase.
+
+If we have: 
+
+```
+    {
+        int x;
+        char y;
+        {
+            bool y;
+            x; 
+            y;
+        }
+        x;
+        y;
+    }
+```
+
+We must produce:
+
+```
+    {
+        {
+            x: int;
+            y: bool;
+        }
+        x: int;
+        y: char;
+    }
+```
+
+Scope is important because a particular identifier can be declared for different purposes in different parts of the program.
+
+Example: Subclasses can redeclare a method name to override a method in a superclass.
+
+The role of the symbol table is to pass information from declarations to use. Provide a semantic action during lexical analysis to add to the symbol table. 
+
 ### 2.8 - Intermediate Code Generation
 
+The front-end of the compiler will ultimately generate an intermediate representation of the source program. 
+
+There are two kinds of intermediate representations:
+
+1. Trees (including parse treees and abstract syntax trees)
+2. Linear representation (three-address code, for example)
+
+Refer to previous sections on the abstract syntax tree.
+
+For three-address code, we can think of it as a sequence of elementary program steps. (Addition of two values) There is no hierarchical structure. 
+
+The compiler front-end can create both the trees and three-address code. 
+
+In the concept of three-address code, there are two types of *static checking*:
+
+1. Syntactic checking
+2. Type checking
+
+A three-address code is a sequence of instructions in the form:
+
+```
+x = y op z
+```
+
+Where `x`, `y`, and `z` are names, constants, or compiler generated temporaries. `op` stands for an operator.
+
+For arrays, three-address code looks like:
+
+```
+x[y] = z
+
+x = y[z]
+```
+
+For the above, the first statement puts the value of `z` in the location `x[y]` and the second statment puts the value of `y[z]` in the location `x`.
+
+Three-address code for assignment is then:
+
+```
+x = y
+```
+
+There is a recursive nature in generating three-address code by taking into consideration the *l-value* and *r-value*. 
+
+Take:
+
+```
+a[i] = 2 * a[j - k]
+```
+
+First, determine three-address for `j - k`:
+
+```
+t1 = j - k
+```
+
+Then determine the three-address for `a[t1]`:
+
+```
+t2 = a[t1]
+```
+
+Then determine the three-address code for `2 * t2`:
+
+```
+t3 = 2 * t2
+```
+
+Then, perform assignment for `a[i]`:
+
+```
+a[i] = t3
+```
+
+The full sequence is then:
+
+```
+t1 = j - k
+t2 = a[t1]
+t3 = 2 * t2
+a[i] = t3
+```
+
+Refer to the book explanation on why this is recursive in nature.
