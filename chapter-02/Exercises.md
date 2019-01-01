@@ -463,8 +463,48 @@ private Token scanRelop() throws IOException {
 }
 ```
 
-See [Code for Exercise 2.6.2](code/ex262)
+See [Code for Exercise 2.6.2](code/ex262).
 
  #### Exercise 2.6.3: Extend the lexical analyzer in Section 2.6.5 to recognize floating point numbers such as `2.`, `3.14`, and `.5`.
 
- [TODO]
+We can extend the existing number recognizer within `Lexer.java` to handle floating points. We keep track of two values here: a `base` which is the number before the `.`, and the `mantissa`, the significant digits after `.`. 
+
+If we find that the character value is `.`, then we can start parsing the `mantissa` value. Each subsequent digit encountered should be divided by `10^n`, where `n` is the current place of the value after `.`. 
+
+The result obtained should then be the value of `base + mantissa`.
+
+ ```
+if(Character.isDigit(peek) || peek == '.') {
+    boolean isFloating = false;
+    int places = 10;
+    float mantissa = 0;
+    int base = 0;
+
+    do {
+        if(peek == '.') {
+            isFloating = true;
+
+            // Move to the next digit.
+            peek = (char)System.in.read();
+        }
+
+        if(isFloating) {
+            mantissa = mantissa + ((float)Character.digit(peek, 10) / places);
+            places *= 10;
+        } else {
+            base = (base * 10) + Character.digit(peek, 10);
+        }
+
+        peek = (char)System.in.read();
+    } while(Character.isDigit(peek) || peek == '.');
+
+    float result = base + mantissa;
+
+    // Debugging purposes
+    // System.out.println("Parsed number: " + result);
+
+    return new Num(result);
+}
+```
+
+See [Code for Exercise 2.6.3](code/ex263).
