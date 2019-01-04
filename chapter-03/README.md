@@ -54,3 +54,21 @@ printf("Total = %d\n", score);
 Usually, the lexical analyzer not only returns just the token type to the parser, but also the token attribute value as it is useful for other operations and/or for manipulation of the symbol table.
 
 ### 3.2 - Input Buffering
+
+Sometimes you need to look at one character ahead. A clean way to solve this is to buffer the input for processing.
+
+A buffering technique:
+
+* Use a buffer of size *N*. *N* can be the size of a disk block (4096 bytes, for example)
+* A system call to read will return the N characters into the buffer. If there are fewer than N characters, then **eof** character will indicate the end of file.
+
+While processing the input, we can use 2 pointers:
+
+1. A *lexemeBegin* pointer to mark the beginning of the current lexeme. This is the extent in which we are attempting to determine.
+2. A *forward* pointer to move ahead until a pattern match is found. 
+
+The *forward* pointer moves until a pattern match is found for a lexeme. Upon doing so, it is set to the character at its right end. Then set *lexemeBegin* to the character immediately after the lexeme just found.
+
+Keep advancing until the `EOF` character has been encountered. 
+
+### 3.3 - Specification of Tokens
