@@ -72,3 +72,46 @@ The *forward* pointer moves until a pattern match is found for a lexeme. Upon do
 Keep advancing until the `EOF` character has been encountered. 
 
 ### 3.3 - Specification of Tokens
+
+Regular expressions are a way to specify the patterns for tokens.
+
+* *alphabet* is a set of symbols.
+* *string* is a sequence of symbols drawn from the alphabet.
+* *language* is a countable set of strings over some fixed alphabet. 
+
+Given `x` and `y`:
+
+* concatenation
+    * `xy`
+* exponentiation
+    * `x^2y` = `xxy`
+
+The Kleene closure of a language L is denoted by L*. (L concatenated zero or more times)
+
+The positive closure is denoted by L+, which is L* - L^0. (At least one occurrence of L)
+
+Example of a regular expression which defines an identifier in C:
+
+```
+letter_(letter_ | digit)*
+```
+
+Where, *letter_* is represented by `a-z`, `A-Z`, and `_`.
+
+Regular expressions can be built recursively out of smaller regular expressions using basic rules:
+
+1. ε is a regular expression, and L(ε) is {ε}, that is, the language whose sole member is the empty string.
+2. If a is a symbol in Σ, then **a** is a regular expression, and L(**a**) = {*a*}, that is, the language with one string, of length one with *a* in its one position.
+
+(1) and (2) are considered to be the basis, or base case in the recursive procedure. 
+
+Precedence level from highest to lowest:
+
+1. Unary `*`
+2. Concatenation
+3. `|`
+
+`(a)|((b)*(c))` is therefore simplified to: `a|b*c`.
+
+Regular expressions also follows algebraic laws such as commutativity, associativity and idempotency.
+
