@@ -160,7 +160,48 @@ c) Comments, consisting of a string surrounded by `/*` and `*/`, without an inte
 
 ```
 comment -> (/)(*) other* (*)(/)
-other -> (")(*)(/) | letter | digit
+other -> (")(*)(/)(") | letter | digit
 ```
+**!!** d) All strings with digits with no repeated digits. *Hint*: Try this problem first with a few digits, such as {0, 1, 2}.
 
+This one is complicated to represent by RegEx, so here is an NFA to show the transitions:
 
+![NFA for Exercise 3.3.5d](assets/RegularDefinition00.png)
+
+**!!** e) All strings of digits with at least one repeated digit.
+
+**!!** f) All strings of a's and b's with an even number of a's and an odd number of b's. 
+
+g) The set of Chess moves, in the information notation, such as `p-k4` or `kbpXqn`.
+
+**!!** h) All strings of a's and b's that do not contain the substring *abb*.
+
+i) All strings of a's and b's that do not contain the subsequence *abb*.
+
+`b*a*b?a*`
+
+**Exercise 3.3.6: Write chracter classes for the following sets of characters:**
+
+a) The first ten letters (up to "j") in either upper or lower case.
+
+`[A-Ja-j]`
+
+b) The lower case consonants.
+
+`[b-d|f-h|j-n|p-t|v-z]`
+
+c) The "digits" in a hexadecimal number (choose either upper or lower case for the "digits" above 9).
+
+`[0-9A-F]`
+
+d) The characters that can appear at the end of a legitimate English sentence (e.g., exclamation point).
+
+`.|?|!`
+
+**Exercise 3.3.7: Note that these regular expressions give all the following symbols (operator characters) special meaning:**
+
+`\ " . ^ $ [ ] * + ? { } | /`
+
+**Their special meaning must be turned off if they are needed to represent themselves in a character string. We can do so by quoting the character within a string of length one or more; e.g., the regular expression `"**"` matches the string `**`. We can also get the literal meaning of an operator character by preceding it by a backslash. Thus, the regular expression `\*\*` also matches the string `**`. Write a regular expression that matches the string `"\`.**
+
+Following the same rules stated above we can write the regex as: `[\"\\]`

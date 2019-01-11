@@ -115,3 +115,5 @@ Precedence level from highest to lowest:
 
 Regular expressions also follows algebraic laws such as commutativity, associativity and idempotency.
 
+### 3.4 - Recognition of Tokens
+
