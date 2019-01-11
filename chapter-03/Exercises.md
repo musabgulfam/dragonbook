@@ -178,6 +178,10 @@ g) The set of Chess moves, in the information notation, such as `p-k4` or `kbpXq
 
 i) All strings of a's and b's that do not contain the subsequence *abb*.
 
+Here, we hae to remember that subsequence defines a string where any string can be formed by deleting 0 or more characters in consecutive positions.
+
+Ex: `baan` would be a subsequence of `banana`. We can then generate for any string without `abb` as a subsequence as:
+
 `b*a*b?a*`
 
 **Exercise 3.3.6: Write chracter classes for the following sets of characters:**
