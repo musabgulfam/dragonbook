@@ -176,6 +176,12 @@ g) The set of Chess moves, in the information notation, such as `p-k4` or `kbpXq
 
 **!!** h) All strings of a's and b's that do not contain the substring *abb*.
 
+As long as we don't follow an `a` with 2 consecutive `b`, we are good here. We must always either end with an `a`, or `ab` as the suffix. So last character must be `b?`.  
+
+Our strings can either start with an `a`, or a `b`. 
+
+Our ansewr is then: `b*(a+b?)*`.
+
 i) All strings of a's and b's that do not contain the subsequence *abb*.
 
 Here, we hae to remember that subsequence defines a string where any string can be formed by deleting 0 or more characters in consecutive positions.
